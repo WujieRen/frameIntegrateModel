@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
+    <!-- 开启spring注解 -->
+    <context:annotation-config />
+
+    <!-- 设置spring去哪个包找注解的类 -->
+    <!-- 这个扫描粒度会导致 XXX cant autowared??? -->
+    <context:component-scan base-package="com.ssm.demo.mapper" />
+
+    <!-- 设置properties文件的路径 -->
+    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations" value="classpath:jdbc.properties"/>
+    </bean>
+    <!--<context:property-placeholder location="classpath:jdbc.properties" />-->
+    <!-- JNDI获取数据源(使用dbcp连接池) -->
+    <!-- 因为我们使用的这个数据源是采用 dbcp连接池，对于连接池来说，整个应用中只有一个，所以作用域需要设置成单例 因为获取数据源是非常消耗性能，所以我们也要采用单例模式-->
+    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+        <property name="driverClassName" value="${driver}"/>
+        <property name="url" value="${url}"/>
+        <property name="username" value="${username}"/>
+        <property name="password" value="${password}"/>
+        <property name="maxIdle" value="40" />
+        <property name="minIdle" value="1" />
+        <property name="initialSize" value="1" />
+        <property name="maxWait" value="60" />
+    </bean>
+
+    <!-- 创建SqlSessionFactory -->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <!-- 引用的数据源 -->
+        <property name="dataSource" ref="dataSource"/>
+        <property name="mapperLocations">
+            <array>
+                <!--<value>classpath*:dao/UserMapper.xml</value>-->
+                <!-- 这种方式需要修改pom,将.xml文件打包 -->
+                <value>com/ssm/demo/mapper/UserMapper.xml</value>
+            </array>
+        </property>
+        <!--这两种方式都行，用其中之一即可-->
+        <!--<property name="configLocation" value="classpath:mybatis.xml"/>-->
+        <!-- 别名 -->
+        <property name="typeAliasesPackage" value="com.ssm.demo.model"/>
+    </bean>
+
+    <!-- 基于Mapper接口的方式 -->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="com.ssm.demo.mapper" />
+    </bean>
+
+    <!-- 也是一种方式???? -->
+    <!--<bean class="org.mybatis.spring.mapper.MapperFactoryBean">
+        <property name="sqlSessionFactory" ref="sqlSessionFactory" />
+    </bean>-->
+
+    <!-- 根据构造函数注入sqlSessionFactory -->
+    <bean id="sqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate">
+        <constructor-arg index="0" ref="sqlSessionFactory"/>
+    </bean>
+
+    <!-- Spring事务管理是通过AOP来完成 -->
+    <bean id="txManage" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+
+    <!--定义切面-->
+    <aop:config>
+        <!-- 定义切点：那个类下面的所有的类的所有的方法 -->
+        <aop:pointcut id="allMethods" expression="execution(* com.ssm.demo.dao.*.*(..))"/>
+        <aop:advisor advice-ref="txAdvice" pointcut-ref="allMethods"/>
+    </aop:config>
+    <!--配置声明事务-->
+    <tx:advice id="txAdvice" transaction-manager="txManage">
+        <tx:attributes>
+            <!-- 如果没有事务就声明事务 -->
+            <tx:method name="add*" propagation="REQUIRED"/>
+            <tx:method name="update*" propagation="REQUIRED"/>
+            <tx:method name="del*" propagation="REQUIRED"/>
+            <!-- 剩下均不添加 -->
+            <tx:method name="*" read-only="true"/>
+        </tx:attributes>
+    </tx:advice>
+
+</beans>
