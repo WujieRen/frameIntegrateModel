@@ -188,16 +188,16 @@ https://blog.csdn.net/kkdelta/article/details/5507799
 # 7. F&A
 1. org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'sqlSessionFactory' defined in class path resource [spring.xml]: ... Cause: java.lang.IllegalArgumentException: **Mapped Statements collection already contains value for com.ssm.demo.model.User.getUserList**
   - 原因：spring.xml中连续导入两次。（还可能是因为在XXXMapper.xml中有两个id的值相同）
-  ![图片1](\ssmIntegrateDemo\src\main\resources\img\1.png)
+  ![图片1](https://github.com/WujieRen/frameIntegrateModel/tree/master/ssmIntegrateDemo/src/main/resources/img/1.png)
   - 解决：去掉一个
 2. pom打包不起作用:
   - 原因：不知。
   - 解决：删除自带的<pluginManagement/>后就好了。
-3. Error:Cannot build Artifact :war exploded because it is included into a circular depency
+3. Error:Cannot build Artifact :war exploded because it is included into a circular dependency
   - 原因：pom打的war包有问题
   - Ctrl+Shift+S，删除Artifacts下的war包重新装载tomcat。
 4. setUserMapper()爆红线：UserMapper cant autoware
-  - 原因：不知道
+  - 原因：不知道（好像是扫描器给定粒度的问题，粒度给小后红线消失。但粒度太小导致有东西扫描不到）
   - 解决：
 ```$xslt
 <!-- 设置spring去哪个包找注解的类 -->
@@ -205,7 +205,7 @@ https://blog.csdn.net/kkdelta/article/details/5507799
 <context:component-scan base-package="com.ssm.demo.mapper" /> 
 ```
 5. org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'sqlSessionFactory' defined in class path resource [spring.xml]: ...  Could not open ServletContext resource [/dao/UserMapper.xml]
-  - 原因：不知，目测是找不到dao/UserMapper.xml，但是不应该啊。改了两次没效果。目测错误位置如下：
+  - 原因：原因就是这里，但是不知道为什么昨天改了以后也不行，今天又好了。可能是昨天环境中有一些bad dependency，以后类似这种问题可以把整个环境重启试试。
 ```$xslt
 <!-- 创建SqlSessionFactory -->
 <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
