@@ -145,7 +145,7 @@
 
    
 # 3. controller级别配置：spring-servlet.xml（控制层上下文）
-1. 开启SpringMVC注解
+1. 开启SpringMVC注解和业务组件注解
 2. 视图解析器
 3. 可选
     - 处理静态资源文件
