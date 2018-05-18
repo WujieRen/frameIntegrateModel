@@ -9,7 +9,7 @@
 
     <!-- 设置spring去哪个包找注解的类 -->
     <!-- 这个扫描粒度会导致 XXX cant autowared??? -->
-    <context:component-scan base-package="com.ssm.demo.mapper" />
+    <context:component-scan base-package="com.ssm.demo" />
 
     <!-- 设置properties文件的路径 -->
     <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
@@ -35,9 +35,9 @@
         <property name="dataSource" ref="dataSource"/>
         <property name="mapperLocations">
             <array>
-                <!--<value>classpath*:dao/UserMapper.xml</value>-->
+                <value>classpath:dao/UserMapper.xml</value>
                 <!-- 这种方式需要修改pom,将.xml文件打包 -->
-                <value>com/ssm/demo/mapper/UserMapper.xml</value>
+                <!--<value>classpath:com/ssm/demo/mapper/UserMapper.xml</value>-->
             </array>
         </property>
         <!--这两种方式都行，用其中之一即可-->

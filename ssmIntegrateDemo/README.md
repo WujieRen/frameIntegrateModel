@@ -222,5 +222,8 @@
     <property name="typeAliasesPackage" value="com.ssm.demo.model"/>
 </bean>
 ```
-  - 解决：累死爹了...明天解决...
-    
+  - 解决：
+```
+<!-- 修改value如下 -->
+<value>classpath:com/ssm/demo/mapper/UserMapper.xml</value>
+``` 

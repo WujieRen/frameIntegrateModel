@@ -25,7 +25,7 @@
         <mybatis.version>3.4.5</mybatis.version>
         <mysql.version>6.0.6</mysql.version>
         <dbcp.version>1.4</dbcp.version>
-        <json.version>2.7.4</json.version>
+        <json.version>2.9.4</json.version>
     </properties>
 
     <dependencies>

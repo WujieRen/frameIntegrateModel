@@ -21,6 +21,6 @@ public class UserDaoImpl implements IUserDao {
 
     @Override
     public List<User> getUserList() {
-        return userMapper.getUsreList();
+        return userMapper.getUserList();
     }
 }
