@@ -188,7 +188,7 @@ https://blog.csdn.net/kkdelta/article/details/5507799
 # 7. F&A
 1. org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'sqlSessionFactory' defined in class path resource [spring.xml]: ... Cause: java.lang.IllegalArgumentException: **Mapped Statements collection already contains value for com.ssm.demo.model.User.getUserList**
   - 原因：spring.xml中连续导入两次。（还可能是因为在XXXMapper.xml中有两个id的值相同）  
-  ![图片1](https://github.com/WujieRen/frameIntegrateModel/tree/master/ssmIntegrateDemo/src/main/resources/img/1.png)
+  ![图片1](https://github.com/WujieRen/frameIntegrateModel/raw/master/ssmIntegrateDemo/src/main/resources/img/1.png)
   - 解决：去掉一个
 2. pom打包不起作用:
   - 原因：不知。
