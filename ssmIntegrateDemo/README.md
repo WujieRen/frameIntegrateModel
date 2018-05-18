@@ -179,9 +179,11 @@
 # 6. 关于classpath:和classpath*:
 1. classpath：只会到你的class路径中查找找文件。
 2. classpath*：不仅包含class路径，还包括jar文件中（class路径）进行查找。
-> 注意： 用classpath*:需要遍历所有的classpath，所以加载速度是很慢的；因此，在规划的时候，应该尽可能规划好资源文件所在的路径，尽量避免使用classpath*
-> reference: https://blog.csdn.net/xing_sky/article/details/77934078
-> https://blog.csdn.net/kkdelta/article/details/5507799
+> 注意： 用classpath*:需要遍历所有的classpath，所以加载速度是很慢的；因此，在规划的时候，应该尽可能规划好资源文件所在的路径，尽量避免使用classpath*  
+
+>reference:  
+https://blog.csdn.net/xing_sky/article/details/77934078   
+https://blog.csdn.net/kkdelta/article/details/5507799
 
 # 7. F&A
 1. org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'sqlSessionFactory' defined in class path resource [spring.xml]: ... Cause: java.lang.IllegalArgumentException: **Mapped Statements collection already contains value for com.ssm.demo.model.User.getUserList**
